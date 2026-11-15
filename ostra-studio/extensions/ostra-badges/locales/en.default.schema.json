@@ -1,0 +1,11 @@
+{
+  "blocks": {
+    "badges": {
+      "name": "Ostra badges",
+      "product": "Product",
+      "style": "Style",
+      "outline": "Outline",
+      "filled": "Filled"
+    }
+  }
+}

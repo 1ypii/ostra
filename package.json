@@ -1,0 +1,14 @@
+{
+  "name": "ostra",
+  "scripts": {
+    "build": "tailwindcss -i src/tailwind.css -o theme/assets/ostra.css --minify",
+    "watch": "tailwindcss -i src/tailwind.css -o theme/assets/ostra.css --watch",
+    "dev": "shopify theme dev --path theme --store ostra-ge6wkrde.myshopify.com"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.5",
+    "tailwindcss": "^4.3.5"
+  },
+  "private": true
+}

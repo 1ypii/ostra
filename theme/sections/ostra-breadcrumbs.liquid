@@ -1,0 +1,103 @@
+{%- liquid
+  assign parent = blank
+  if template.name == 'product' and collection
+    assign parent = collection
+  elsif template.name == 'product'
+    assign parent = product.collections | reject: 'handle', 'frontpage' | first
+  endif
+
+  assign current_title = page_title
+  if template.name == 'product'
+    assign current_title = product.title
+  elsif template.name == 'collection'
+    assign current_title = collection.title
+  endif
+-%}
+
+<nav class="color-{{ section.settings.color_scheme }} gradient tw:px-6 tw:pt-6 tw:md:px-12" aria-label="{{ 'ostra.breadcrumbs.label' | t }}">
+  <ol class="tw:m-0 tw:flex tw:flex-wrap tw:items-center tw:gap-2 tw:p-0 tw:text-xs tw:uppercase tw:tracking-[0.15em] tw:text-muted" role="list">
+    <li class="tw:list-none">
+      <a href="{{ routes.root_url }}" class="link tw:text-inherit">{{ 'ostra.breadcrumbs.home' | t }}</a>
+    </li>
+    {%- if template.name == 'collection' -%}
+      <li class="tw:list-none" aria-hidden="true">/</li>
+      <li class="tw:list-none">
+        <a href="{{ routes.collections_url }}" class="link tw:text-inherit">{{ 'ostra.breadcrumbs.collections' | t }}</a>
+      </li>
+    {%- endif -%}
+    {%- if parent != blank -%}
+      <li class="tw:list-none" aria-hidden="true">/</li>
+      <li class="tw:list-none">
+        <a href="{{ parent.url }}" class="link tw:text-inherit">{{ parent.title | escape }}</a>
+      </li>
+    {%- endif -%}
+    <li class="tw:list-none" aria-hidden="true">/</li>
+    <li class="tw:list-none">
+      <span aria-current="page" class="tw:text-ink">{{ current_title | escape }}</span>
+    </li>
+  </ol>
+</nav>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": {{ 'ostra.breadcrumbs.home' | t | json }},
+        "item": {{ shop.url | append: routes.root_url | json }}
+      }
+      {%- assign position = 2 -%}
+      {%- if template.name == 'collection' -%},
+        {
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ 'ostra.breadcrumbs.collections' | t | json }},
+          "item": {{ shop.url | append: routes.collections_url | json }}
+        }
+        {%- assign position = position | plus: 1 -%}
+      {%- endif -%}
+      {%- if parent != blank -%},
+        {
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ parent.title | json }},
+          "item": {{ shop.url | append: parent.url | json }}
+        }
+        {%- assign position = position | plus: 1 -%}
+      {%- endif -%},
+      {
+        "@type": "ListItem",
+        "position": {{ position }},
+        "name": {{ current_title | json }},
+        "item": {{ canonical_url | json }}
+      }
+    ]
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Ostra breadcrumbs",
+  "tag": "div",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["product", "collection"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ostra breadcrumbs"
+    }
+  ]
+}
+{% endschema %}

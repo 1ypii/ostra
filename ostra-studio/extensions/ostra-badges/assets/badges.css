@@ -1,0 +1,23 @@
+.ostra-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0 0 1.2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.ostra-badges__item {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid currentColor;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.ostra-badges--filled .ostra-badges__item {
+  border-color: rgb(var(--color-foreground));
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}

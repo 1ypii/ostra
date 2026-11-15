@@ -1,0 +1,12 @@
+api_version = "2026-07"
+
+[[extensions]]
+name = "t:name"
+handle = "product-specs"
+type = "ui_extension"
+uid = "5ec13be6-6e26-c476-f607-486261174c0b96847bf3"
+
+[[extensions.targeting]]
+module = "./src/BlockExtension.jsx"
+target = "admin.product-details.block.render"
+

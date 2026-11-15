@@ -1,0 +1,33 @@
+{% doc %}
+  Renders a progress bar towards the free shipping threshold set in theme settings.
+
+  @example
+  {% render 'ostra-free-shipping' %}
+{% enddoc %}
+{%- if settings.free_shipping_enabled and settings.free_shipping_threshold > 0 and cart.item_count > 0 -%}
+  {%- liquid
+    assign goal = settings.free_shipping_threshold | times: 100
+    assign remaining = goal | minus: cart.total_price
+    assign percent = cart.total_price | times: 100 | divided_by: goal | at_most: 100
+  -%}
+  <div class="ostra-shipping tw:flex tw:flex-col tw:gap-2 tw:py-4">
+    <p class="tw:m-0 tw:text-sm">
+      {%- if remaining > 0 -%}
+        {%- assign remaining_money = remaining | money -%}
+        {{ 'ostra.shipping.remaining_html' | t: amount: remaining_money }}
+      {%- else -%}
+        {{ 'ostra.shipping.unlocked' | t }}
+      {%- endif -%}
+    </p>
+    <div
+      class="ostra-shipping__track tw:h-[2px] tw:w-full tw:bg-line"
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="{{ percent }}"
+      aria-label="{{ 'ostra.shipping.label' | t }}"
+    >
+      <span class="ostra-shipping__fill tw:block tw:h-full tw:bg-ink" style="width: {{ percent }}%;"></span>
+    </div>
+  </div>
+{%- endif -%}

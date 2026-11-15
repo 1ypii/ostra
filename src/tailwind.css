@@ -1,0 +1,55 @@
+@import "tailwindcss/theme.css" prefix(tw);
+@import "tailwindcss/utilities.css";
+
+@source "../theme/sections";
+@source "../theme/snippets";
+@source "../theme/blocks";
+@source "../theme/layout";
+
+@theme {
+  --spacing: 0.4rem;
+
+  --text-xs: 1.2rem;
+  --text-xs--line-height: 1.6rem;
+  --text-sm: 1.4rem;
+  --text-sm--line-height: 2rem;
+  --text-base: 1.6rem;
+  --text-base--line-height: 2.4rem;
+  --text-lg: 1.8rem;
+  --text-lg--line-height: 2.8rem;
+  --text-xl: 2rem;
+  --text-xl--line-height: 2.8rem;
+  --text-2xl: 2.4rem;
+  --text-2xl--line-height: 3.2rem;
+  --text-3xl: 3rem;
+  --text-3xl--line-height: 3.6rem;
+  --text-4xl: 3.6rem;
+  --text-4xl--line-height: 4rem;
+  --text-5xl: 4.8rem;
+  --text-5xl--line-height: 1;
+  --text-6xl: 6rem;
+  --text-6xl--line-height: 1;
+  --text-7xl: 7.2rem;
+  --text-7xl--line-height: 1;
+  --text-8xl: 9.6rem;
+  --text-8xl--line-height: 1;
+
+  --container-xs: 32rem;
+  --container-sm: 38.4rem;
+  --container-md: 44.8rem;
+  --container-lg: 51.2rem;
+  --container-xl: 57.6rem;
+  --container-2xl: 67.2rem;
+  --container-3xl: 76.8rem;
+
+  --font-heading: var(--font-heading-family);
+  --font-body: var(--font-body-family);
+
+  --color-ink: rgb(var(--color-foreground));
+  --color-paper: rgb(var(--color-background));
+  --color-line: rgb(var(--color-foreground) / 0.12);
+  --color-muted: rgb(var(--color-foreground) / 0.65);
+  --color-clay: #8a4b2c;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}

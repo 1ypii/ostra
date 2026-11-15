@@ -1,0 +1,49 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ostra",
+  "account_id": "7eefd22f30e5c1706b004911d075944b",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "ostra"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "ostra-cache"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "ostra-tags",
+      "database_id": "a6e19964-cfb0-42da-a109-f93d3b7409bf"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "cartlimit",
+      "namespace_id": "4001",
+      "simple": { "limit": 30, "period": 60 }
+    },
+    {
+      "name": "hooklimit",
+      "namespace_id": "4002",
+      "simple": { "limit": 60, "period": 60 }
+    }
+  ],
+  "vars": {
+    "shopifystore": "ostra-ge6wkrde.myshopify.com"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

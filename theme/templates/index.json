@@ -1,0 +1,206 @@
+{
+  "sections": {
+    "hero": {
+      "type": "ostra-hero",
+      "settings": {
+        "image": "shopify://shop_images/mock-shop-hero.png",
+        "layout": "image_right",
+        "min_height": 85,
+        "eyebrow": "Small batch stoneware",
+        "heading": "Made slowly, used every day",
+        "text": "<p>Wheel thrown mugs, plates and bowls glazed in quiet colours and fired twice for a surface that ages well.</p>",
+        "button_label": "Shop the range",
+        "button_link": "shopify://collections/all",
+        "button_label_2": "Questions",
+        "button_link_2": "#questions",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "tabs": {
+      "type": "ostra-collection-tabs",
+      "blocks": {
+        "tab-dining": {
+          "type": "tab",
+          "settings": {
+            "collection": "dining-and-serving",
+            "label": "Dining"
+          }
+        },
+        "tab-decor": {
+          "type": "tab",
+          "settings": {
+            "collection": "decor-and-keepsakes",
+            "label": "Decor"
+          }
+        },
+        "tab-gathered": {
+          "type": "tab",
+          "settings": {
+            "collection": "gathered-moments-originals",
+            "label": "Gathered"
+          }
+        }
+      },
+      "block_order": ["tab-dining", "tab-decor", "tab-gathered"],
+      "settings": {
+        "heading": "Shop by table",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "image_ratio": "portrait",
+        "quick_add": "standard",
+        "show_view_all": true,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "values": {
+      "type": "multicolumn",
+      "blocks": {
+        "column-1": {
+          "type": "column",
+          "settings": {
+            "title": "Thrown by hand",
+            "text": "<p>Every piece starts as a lump of clay on the wheel, so no two are quite the same.</p>"
+          }
+        },
+        "column-2": {
+          "type": "column",
+          "settings": {
+            "title": "Fired twice",
+            "text": "<p>A bisque firing and a glaze firing to stoneware temperature for pieces that last.</p>"
+          }
+        },
+        "column-3": {
+          "type": "column",
+          "settings": {
+            "title": "Safe for daily use",
+            "text": "<p>Lead free glazes that go in the dishwasher, microwave and oven without a second thought.</p>"
+          }
+        }
+      },
+      "block_order": ["column-1", "column-2", "column-3"],
+      "settings": {
+        "title": "",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "color_scheme": "scheme-2",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "look": {
+      "type": "ostra-shop-the-look",
+      "blocks": {
+        "spot-cup": {
+          "type": "hotspot",
+          "settings": {
+            "product": "hand-thrown-stoneware-mug-pack-1a8ac70e95048864",
+            "x": 52,
+            "y": 61
+          }
+        },
+        "spot-mug": {
+          "type": "hotspot",
+          "settings": {
+            "product": "rounded-stoneware-mug",
+            "x": 80,
+            "y": 36
+          }
+        },
+        "spot-bowl": {
+          "type": "hotspot",
+          "settings": {
+            "product": "everyday-cereal-bowl",
+            "x": 12,
+            "y": 64
+          }
+        }
+      },
+      "block_order": ["spot-cup", "spot-mug", "spot-bowl"],
+      "settings": {
+        "image": "shopify://shop_images/ostra-look.png",
+        "eyebrow": "Shop the table",
+        "heading": "A slow breakfast",
+        "text": "<p>Tap a piece to see it up close, or pick from the list.</p>",
+        "color_scheme": "scheme-2",
+        "card_color_scheme": "scheme-5"
+      }
+    },
+    "faq": {
+      "type": "ostra-faq",
+      "blocks": {
+        "q-dishwasher": {
+          "type": "question",
+          "settings": {
+            "question": "Is it dishwasher safe?",
+            "answer": "<p>Yes. Every piece is fired to stoneware temperature and is safe in the dishwasher, microwave and oven.</p>"
+          }
+        },
+        "q-variation": {
+          "type": "question",
+          "settings": {
+            "question": "Will my piece look exactly like the photo?",
+            "answer": "<p>Close, but not exact. Glaze pools and breaks differently on every piece, which is part of what makes it handmade.</p>"
+          }
+        },
+        "q-shipping": {
+          "type": "question",
+          "settings": {
+            "question": "How is it packed?",
+            "answer": "<p>Each order is wrapped in recycled paper and moulded pulp, with no plastic fill. Anything that arrives broken is replaced free.</p>"
+          }
+        },
+        "q-returns": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return something?",
+            "answer": "<p>Unused pieces can be returned within 30 days of delivery for a full refund.</p>"
+          }
+        }
+      },
+      "block_order": ["q-dishwasher", "q-variation", "q-shipping", "q-returns"],
+      "settings": {
+        "heading": "Questions",
+        "anchor": "questions",
+        "text": "<p>Anything else, write to us and a real person will reply.</p>",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "First look at new batches",
+            "heading_size": "h1"
+          }
+        },
+        "paragraph": {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Kiln openings sell out fast. Get a note the morning they go live.</p>"
+          }
+        },
+        "email_form": {
+          "type": "email_form",
+          "settings": {}
+        }
+      },
+      "block_order": ["heading", "paragraph", "email_form"],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "full_width": true,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": ["hero", "tabs", "values", "look", "faq", "newsletter"]
+}

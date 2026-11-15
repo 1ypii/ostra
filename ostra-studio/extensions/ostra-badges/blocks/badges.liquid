@@ -1,0 +1,39 @@
+{%- assign item = block.settings.product | default: product -%}
+{%- assign badges = item.metafields.ostra.badges.value -%}
+
+{%- if badges != blank -%}
+  <ul class="ostra-badges ostra-badges--{{ block.settings.style }}" role="list" {{ block.shopify_attributes }}>
+    {%- for badge in badges -%}
+      <li class="ostra-badges__item">{{ badge | escape }}</li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:blocks.badges.name",
+  "target": "section",
+  "stylesheet": "badges.css",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:blocks.badges.product",
+      "autofill": true
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:blocks.badges.style",
+      "default": "outline",
+      "options": [
+        { "value": "outline", "label": "t:blocks.badges.outline" },
+        { "value": "filled", "label": "t:blocks.badges.filled" }
+      ]
+    }
+  ]
+}
+{% endschema %}

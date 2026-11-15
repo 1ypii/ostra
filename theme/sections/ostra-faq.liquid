@@ -1,0 +1,166 @@
+<div {% if section.settings.anchor != blank %}id="{{ section.settings.anchor | handleize }}" {% endif %}class="color-{{ section.settings.color_scheme }} gradient tw:grid tw:grid-cols-1 tw:gap-10 tw:px-6 tw:py-12 tw:md:grid-cols-12 tw:md:px-12 tw:md:py-20">
+  <div class="tw:md:col-span-4">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="tw:font-heading tw:m-0 tw:text-4xl tw:md:text-6xl tw:tracking-tight">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="tw:mt-4 tw:max-w-sm tw:text-muted">{{ section.settings.text }}</div>
+    {%- endif -%}
+  </div>
+
+  <div class="tw:md:col-span-8">
+    {%- for block in section.blocks -%}
+      <details class="ostra-faq__item tw:border-t tw:border-line{% if forloop.last %} tw:border-b{% endif %}" {{ block.shopify_attributes }}>
+        <summary class="ostra-faq__question tw:flex tw:cursor-pointer tw:items-center tw:justify-between tw:gap-6 tw:py-6 tw:text-lg">
+          <span>{{ block.settings.question | escape }}</span>
+          <span class="ostra-faq__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="ostra-faq__answer">
+          <div class="tw:max-w-2xl tw:pb-6 tw:text-muted">{{ block.settings.answer }}</div>
+        </div>
+      </details>
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- if section.blocks.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for block in section.blocks -%}
+          {
+            "@type": "Question",
+            "name": {{ block.settings.question | strip_html | json }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ block.settings.answer | strip_html | json }}
+            }
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .ostra-faq__question {
+    list-style: none;
+  }
+
+  .ostra-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .ostra-faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .ostra-faq__icon::before,
+  .ostra-faq__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ostra-faq__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .ostra-faq__item[open] .ostra-faq__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .ostra-faq__item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size 0.4s cubic-bezier(0.22, 1, 0.36, 1), content-visibility 0.4s allow-discrete;
+  }
+
+  .ostra-faq__item[open]::details-content {
+    block-size: auto;
+  }
+
+  .ostra-faq {
+    interpolate-size: allow-keywords;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ostra-faq__item::details-content {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ostra FAQ",
+  "tag": "section",
+  "class": "section ostra-faq",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Questions"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor id",
+      "info": "Link to this section with #anchor",
+      "default": "questions"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Is it dishwasher safe?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Yes. Every piece is fired to stoneware temperature and is safe in the dishwasher, microwave and oven.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ostra FAQ",
+      "blocks": [
+        { "type": "question" },
+        { "type": "question" },
+        { "type": "question" }
+      ]
+    }
+  ]
+}
+{% endschema %}

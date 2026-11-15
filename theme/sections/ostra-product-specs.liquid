@@ -1,0 +1,72 @@
+{%- liquid
+  assign specs = product.metafields.ostra
+  assign has_specs = false
+  if specs.material != blank or specs.glaze != blank or specs.dimensions != blank or specs.care != blank
+    assign has_specs = true
+  endif
+-%}
+
+{%- if has_specs -%}
+  <div class="color-{{ section.settings.color_scheme }} gradient tw:grid tw:grid-cols-1 tw:gap-8 tw:border-t tw:border-line tw:px-6 tw:py-12 tw:md:grid-cols-12 tw:md:px-12 tw:md:py-16">
+    <h2 class="tw:font-heading tw:m-0 tw:text-4xl tw:tracking-tight tw:md:col-span-4">
+      {{ section.settings.heading | default: product.title | escape }}
+    </h2>
+
+    <dl class="tw:m-0 tw:md:col-span-8">
+      {%- if specs.material != blank -%}
+        <div class="tw:grid tw:grid-cols-3 tw:gap-4 tw:border-t tw:border-line tw:py-4">
+          <dt class="tw:text-xs tw:uppercase tw:tracking-[0.15em] tw:text-muted">{{ 'ostra.specs.material' | t }}</dt>
+          <dd class="tw:col-span-2 tw:m-0">{{ specs.material | metafield_text }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if specs.glaze != blank -%}
+        <div class="tw:grid tw:grid-cols-3 tw:gap-4 tw:border-t tw:border-line tw:py-4">
+          <dt class="tw:text-xs tw:uppercase tw:tracking-[0.15em] tw:text-muted">{{ 'ostra.specs.glaze' | t }}</dt>
+          <dd class="tw:col-span-2 tw:m-0">{{ specs.glaze | metafield_text }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if specs.dimensions != blank -%}
+        <div class="tw:grid tw:grid-cols-3 tw:gap-4 tw:border-t tw:border-line tw:py-4">
+          <dt class="tw:text-xs tw:uppercase tw:tracking-[0.15em] tw:text-muted">{{ 'ostra.specs.dimensions' | t }}</dt>
+          <dd class="tw:col-span-2 tw:m-0">{{ specs.dimensions | metafield_text }}</dd>
+        </div>
+      {%- endif -%}
+      {%- if specs.care != blank -%}
+        <div class="tw:grid tw:grid-cols-3 tw:gap-4 tw:border-y tw:border-line tw:py-4">
+          <dt class="tw:text-xs tw:uppercase tw:tracking-[0.15em] tw:text-muted">{{ 'ostra.specs.care' | t }}</dt>
+          <dd class="tw:col-span-2 tw:m-0">{{ specs.care | metafield_text | newline_to_br }}</dd>
+        </div>
+      {%- endif -%}
+    </dl>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ostra product details",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Details"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ostra product details"
+    }
+  ]
+}
+{% endschema %}

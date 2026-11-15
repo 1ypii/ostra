@@ -1,0 +1,263 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient tw:px-6 tw:py-12 tw:md:px-12 tw:md:py-20">
+  <div class="tw:flex tw:flex-col tw:gap-6 tw:pb-8 tw:md:flex-row tw:md:items-end tw:md:justify-between">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="tw:font-heading tw:m-0 tw:text-4xl tw:md:text-6xl tw:tracking-tight">
+        {{ section.settings.heading | escape }}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 1 -%}
+      <div class="ostra-tabs__list tw:flex tw:gap-6 tw:overflow-x-auto" role="tablist" aria-label="{{ section.settings.heading | escape }}">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign tab_label = block.settings.label
+            if tab_label == blank
+              assign tab_label = block.settings.collection.title
+            endif
+          -%}
+          <button
+            type="button"
+            role="tab"
+            id="Tab-{{ section.id }}-{{ forloop.index }}"
+            aria-controls="Panel-{{ section.id }}-{{ forloop.index }}"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            class="ostra-tabs__tab tw:shrink-0 tw:cursor-pointer tw:border-0 tw:bg-transparent tw:p-0 tw:pb-2 tw:text-sm tw:uppercase tw:tracking-[0.15em]"
+            {{ block.shopify_attributes }}
+          >
+            {{- tab_label | default: forloop.index | escape -}}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <ostra-tabs>
+    {%- for block in section.blocks -%}
+      {%- assign tab_collection = block.settings.collection -%}
+      <div
+        id="Panel-{{ section.id }}-{{ forloop.index }}"
+        class="ostra-tabs__panel"
+        role="tabpanel"
+        aria-labelledby="Tab-{{ section.id }}-{{ forloop.index }}"
+        {% unless forloop.first %}
+          hidden
+        {% endunless %}
+      >
+        <ul class="grid product-grid contains-card--product grid--2-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop" role="list">
+          {%- if tab_collection != blank and tab_collection.products_count > 0 -%}
+            {%- for product in tab_collection.products limit: section.settings.products_to_show -%}
+              <li class="grid__item">
+                {% render 'card-product',
+                  card_product: product,
+                  media_aspect_ratio: section.settings.image_ratio,
+                  show_secondary_image: true,
+                  lazy_load: true,
+                  section_id: section.id,
+                  quick_add: section.settings.quick_add,
+                  product_view_context: 'collection'
+                %}
+              </li>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              <li class="grid__item">
+                {% render 'card-product', show_vendor: false %}
+              </li>
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+
+        {%- if tab_collection != blank and section.settings.show_view_all -%}
+          <div class="tw:pt-8">
+            <a href="{{ tab_collection.url }}" class="link underlined-link tw:text-sm tw:uppercase tw:tracking-[0.15em]">
+              {{ 'ostra.collection_tabs.view_all' | t: collection: tab_collection.title }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </ostra-tabs>
+</div>
+
+{% stylesheet %}
+  .ostra-tabs__list {
+    scrollbar-width: none;
+  }
+
+  .ostra-tabs__tab {
+    color: rgb(var(--color-foreground) / 0.55);
+    box-shadow: inset 0 -1px 0 transparent;
+    transition: color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .ostra-tabs__tab:hover,
+  .ostra-tabs__tab[aria-selected='true'] {
+    color: rgb(var(--color-foreground));
+  }
+
+  .ostra-tabs__tab[aria-selected='true'] {
+    box-shadow: inset 0 -1px 0 rgb(var(--color-foreground));
+  }
+
+  .ostra-tabs__panel:not([hidden]) {
+    animation: ostra-tab-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes ostra-tab-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.8rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ostra-tabs__panel:not([hidden]) {
+      animation: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('ostra-tabs')) {
+    customElements.define(
+      'ostra-tabs',
+      class extends HTMLElement {
+        connectedCallback() {
+          this.tabs = [...this.closest('.section, .shopify-section').querySelectorAll('[role="tab"]')];
+          this.tabs.forEach((tab, i) => {
+            tab.addEventListener('click', () => this.select(i));
+            tab.addEventListener('keydown', (e) => this.onKey(e, i));
+          });
+        }
+
+        select(index, focus) {
+          this.tabs.forEach((tab, i) => {
+            const active = i === index;
+            tab.setAttribute('aria-selected', active);
+            tab.tabIndex = active ? 0 : -1;
+            document.getElementById(tab.getAttribute('aria-controls')).hidden = !active;
+          });
+          if (focus) this.tabs[index].focus();
+        }
+
+        onKey(e, i) {
+          let next;
+          if (e.key === 'ArrowRight') next = (i + 1) % this.tabs.length;
+          if (e.key === 'ArrowLeft') next = (i - 1 + this.tabs.length) % this.tabs.length;
+          if (e.key === 'Home') next = 0;
+          if (e.key === 'End') next = this.tabs.length - 1;
+          if (next === undefined) return;
+          e.preventDefault();
+          this.select(next, true);
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Ostra collection tabs",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by table"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products per tab",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "label": "Quick add",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show view all link",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "info": "Defaults to the collection title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ostra collection tabs",
+      "blocks": [
+        { "type": "tab" },
+        { "type": "tab" }
+      ]
+    }
+  ]
+}
+{% endschema %}
